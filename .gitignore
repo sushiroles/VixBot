@@ -1,5 +1,5 @@
 test.py
-twitch_credentials.ini
+credentials.ini
 __pycache__
 save_json_data.json
 tokens.ini
