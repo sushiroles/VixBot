@@ -44,8 +44,6 @@ async def on_ready():
 		client.synced = True
 	if not check_for_stream.is_running():
 		check_for_stream.start()
-	announcements_channel = await client.fetch_channel(int(config['channels']['stream_announcements']))
-	await announcements_channel.send('-# (test :3)')
 
 
 
