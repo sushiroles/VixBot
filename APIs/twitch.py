@@ -1,15 +1,13 @@
 from Random.time import *
 from Random.json_tools import *
 
+from APIs.credentials import credentials
+
 import aiohttp
 from asyncio import run
-import configparser
-
-config = configparser.ConfigParser()
-config.read('APIs/twitch_credentials.ini')
 
 class Twitch:
-	def __init__(self, client_id: str = config['bot']['client_id'], client_secret: str = config['bot']['client_secret']):
+	def __init__(self, client_id: str = credentials['twitch']['client_id'], client_secret: str = credentials['twitch']['client_secret']):
 		self.client_id = client_id
 		self.client_secret = client_secret
 		self.token = None
@@ -50,20 +48,18 @@ class Twitch:
 		async with aiohttp.ClientSession() as session:
 			api_url = f'https://api.twitch.tv/helix/users'
 			api_params = {
-				'login': config['vixr']['twitch_user']
+				'login': credentials['twitch']['user']
 			}
 			api_headers = {
 				'Authorization': f'Bearer {await self.get_token()}',
 				'Client-Id': self.client_id
 			}
 			timeout = aiohttp.ClientTimeout(total = 30)
-			start_time = current_unix_time_ms()
 
 			async with session.get(url = api_url, headers = api_headers, params = api_params, timeout = timeout) as response:
 				if response.status == 200:
 					json = await response.json()
 					json = json['data'][0]
-					print(current_unix_time_ms()-start_time)
 					return {
 						'id': json['id'],
 						'login': json['login'],
@@ -82,19 +78,17 @@ class Twitch:
 		async with aiohttp.ClientSession() as session:
 			api_url = f'https://api.twitch.tv/helix/streams'
 			api_params = {
-				'user_login': config['vixr']['twitch_user']
+				'user_login': credentials['twitch']['user']
 			}
 			api_headers = {
 				'Authorization': f'Bearer {await self.get_token()}',
 				'Client-Id': self.client_id
 			}
 			timeout = aiohttp.ClientTimeout(total = 30)
-			start_time = current_unix_time_ms()
 
 			async with session.get(url = api_url, headers = api_headers, params = api_params, timeout = timeout) as response:
 				if response.status == 200:
 					json = await response.json()
-					print(current_unix_time_ms()-start_time)
 					if json['data'] != []:
 						json = json['data'][0]
 						return {
