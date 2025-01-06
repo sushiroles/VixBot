@@ -4,3 +4,4 @@ __pycache__
 save_json_data.json
 tokens.ini
 vars.ini
+config.ini
