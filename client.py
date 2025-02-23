@@ -44,6 +44,7 @@ async def on_ready():
 		client.synced = True
 	if not check_for_stream.is_running():
 		check_for_stream.start()
+	print('Ready!')
 
 
 
